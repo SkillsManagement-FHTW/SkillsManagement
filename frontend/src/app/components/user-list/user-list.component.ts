@@ -10,7 +10,7 @@ import { DialogService } from '../../core/services/dialog';
 import { User } from '../../models/user.model';
 import { Skill } from '../../models/skill.model';
 import { HttpClientModule } from '@angular/common/http';
-import { RouterModule, Router } from '@angular/router';
+import { RouterModule, Router, ActivatedRoute } from '@angular/router';
 import { UserRole } from '../../models/enums/user-roles.enum';
 import { UserLanguage } from '../../models/enums/user-language.enum';
 import { CompetenceField } from '../../models/enums/competence-field.enum';
@@ -152,7 +152,7 @@ export class UserListComponent implements OnInit, OnDestroy {
   // for permission control
   isAdminOrCompetenceLeader: boolean = false;
   currentUserId: string = '';
-  
+
   constructor(
     private userService: UserService,
     private skillService: SkillService,
@@ -162,7 +162,8 @@ export class UserListComponent implements OnInit, OnDestroy {
     private dialogService: DialogService,
     private router: Router,
     private notificationService: NotificationService,
-    private translateService: TranslateService
+    private translateService: TranslateService,
+    private route: ActivatedRoute
   ) {
     // Default-Text für E-Mail immer auf Deutsch
     this.emailSubject = 'Nachricht vom Skills Management System';
@@ -191,6 +192,16 @@ export class UserListComponent implements OnInit, OnDestroy {
       });
     }
     
+    this.route.queryParamMap.subscribe(params => {
+      const skill = params.get('skill');
+
+      if (skill) {
+        this.selectedSkills = [skill];
+        this.selectedSkill = skill;
+        this.applyFilters();
+      }
+    })
+
     this.loadUsers();
     console.log('UserListComponent initialized');
     

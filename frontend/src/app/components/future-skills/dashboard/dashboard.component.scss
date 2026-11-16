@@ -193,6 +193,11 @@ ngx-charts-legend .legend-label-text {
   margin: 0 auto;
 }
 
+.chart-card.large ::ng-deep ngx-charts-bar-vertical-stacked .bar,
+.chart-card.bar-slim ::ng-deep .bar {
+  cursor: pointer;
+}
+
 /* RESPONSIVE */
 @media (max-width: 768px) {
   ngx-charts-bar-vertical-stacked {
