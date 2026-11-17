@@ -17,20 +17,35 @@
     <div class="navbar-collapse" [class.open]="isMenuOpen">
       <ul class="navbar-nav" *ngIf="isLoggedIn">
         <li class="nav-item">
-          <a class="nav-link" [routerLink]="['/']" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" (click)="closeMenu()">{{ 'NAVIGATION.MAIN_PAGE' | translate }}</a>
+          <a class="nav-link" [routerLink]="['/']" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}"
+            (click)="closeMenu()">{{ 'NAVIGATION.MAIN_PAGE' | translate }}</a>
         </li>
         <li class="nav-item" *ngIf="isLecturer">
-          <a class="nav-link" [routerLink]="['/profile/skills']" routerLinkActive="active" (click)="closeMenu()">{{ 'NAVIGATION.MANAGE_SKILLS' | translate }}</a>
+          <a class="nav-link" [routerLink]="['/profile/skills']" routerLinkActive="active" (click)="closeMenu()">{{
+            'NAVIGATION.MANAGE_SKILLS' | translate }}</a>
+        </li>
+        <!-- Lecturer Notifications -->
+        <li class="nav-item" *ngIf="isLecturer">
+          <a class="nav-link position-relative" [routerLink]="['/notifications']" routerLinkActive="active"
+            (click)="closeMenu()">
+            {{ 'NAVIGATION.NOTIFICATIONS' | translate }}
+            <span class="notification-badge" *ngIf="openNotificationsCount > 0">
+              {{ openNotificationsCount }}
+            </span>
+          </a>
         </li>
         <li class="nav-item" *ngIf="isAdminOrCompetenceLeader">
-          <a class="nav-link" [routerLink]="['/admin/add-user']" routerLinkActive="active" (click)="closeMenu()">{{ 'NAVIGATION.ADD_USER' | translate }}</a>
+          <a class="nav-link" [routerLink]="['/admin/add-user']" routerLinkActive="active" (click)="closeMenu()">{{
+            'NAVIGATION.ADD_USER' | translate }}</a>
         </li>
         <li class="nav-item" *ngIf="isAdminOrCompetenceLeader">
-          <a class="nav-link" [routerLink]="['/skill-edit']" routerLinkActive="active" (click)="closeMenu()">{{ 'NAVIGATION.EDIT_SKILLS' | translate }}</a>
+          <a class="nav-link" [routerLink]="['/skill-edit']" routerLinkActive="active" (click)="closeMenu()">{{
+            'NAVIGATION.EDIT_SKILLS' | translate }}</a>
         </li>
         <!-- Inactive Users Notification -->
         <li class="nav-item" *ngIf="isAdminOrCompetenceLeader">
-          <a class="nav-link position-relative" [routerLink]="['/inactive-users']" routerLinkActive="active" (click)="closeMenu()">
+          <a class="nav-link position-relative" [routerLink]="['/inactive-users']" routerLinkActive="active"
+            (click)="closeMenu()">
             {{ 'NAVIGATION.NEW_REGISTRATIONS' | translate }}
             <span class="notification-badge" *ngIf="inactiveUsersCount > 0">
               {{inactiveUsersCount}}
@@ -39,9 +54,10 @@
         </li>
         <li class="nav-item" *ngIf="isAdminOrCompetenceLeader">
           <div class="user-dropdown" (clickOutside)="closeFutureSkillsDropdown()">
-            <a class="nav-link user-dropdown-toggle" (click)="toggleDropdown($event)">{{ 'NAVIGATION.FUTURE_SKILLS' | translate }} <span class="dropdown-arrow">{{ isDropdownOpen ? '' : '▾' }}</span></a>
+            <a class="nav-link user-dropdown-toggle" (click)="toggleDropdown($event)">{{ 'NAVIGATION.FUTURE_SKILLS' |
+              translate }} <span class="dropdown-arrow">{{ isDropdownOpen ? '' : '▾' }}</span></a>
             <div class="user-dropdown-menu" *ngIf="isDropdownOpen">
-              <a class="dropdown-item" [routerLink]="['/future-skills/dashboard']"  (click)="closeMenu()">
+              <a class="dropdown-item" [routerLink]="['/future-skills/dashboard']" (click)="closeMenu()">
                 <i class="fa fa-tachometer"></i> {{ 'NAVIGATION.FUTURE_SKILLS_DASHBOARD' | translate }}
               </a>
               <a class="dropdown-item" [routerLink]="['/future-skills/progress']" (click)="closeMenu()">
@@ -51,7 +67,8 @@
           </div>
         </li>
         <li class="nav-item" *ngIf="isAdminOrCompetenceLeader">
-          <a class="nav-link" [routerLink]="['/user']" routerLinkActive="active" (click)="closeMenu()">{{ 'NAVIGATION.USER_OVERVIEW' | translate }}</a>
+          <a class="nav-link" [routerLink]="['/user']" routerLinkActive="active" (click)="closeMenu()">{{
+            'NAVIGATION.USER_OVERVIEW' | translate }}</a>
         </li>
 
         <!-- Language Selector -->
@@ -92,10 +109,12 @@
       <!-- Login/Register links for guests -->
       <ul class="navbar-nav" *ngIf="!isLoggedIn">
         <li class="nav-item">
-          <a class="nav-link" [routerLink]="['/login']" routerLinkActive="active" (click)="closeMenu()">{{ 'NAVIGATION.LOGIN' | translate }}</a>
+          <a class="nav-link" [routerLink]="['/login']" routerLinkActive="active" (click)="closeMenu()">{{
+            'NAVIGATION.LOGIN' | translate }}</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" [routerLink]="['/register']" routerLinkActive="active" (click)="closeMenu()">{{ 'NAVIGATION.REGISTER' | translate }}</a>
+          <a class="nav-link" [routerLink]="['/register']" routerLinkActive="active" (click)="closeMenu()">{{
+            'NAVIGATION.REGISTER' | translate }}</a>
         </li>
         <!-- Language Selector for guests -->
         <li class="nav-item">

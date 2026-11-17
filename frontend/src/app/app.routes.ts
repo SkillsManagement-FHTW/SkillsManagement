@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { NotificationsComponent } from './components/notifications/notifications.component';
 import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
 import { UserComponent} from './views/user/user.component';
@@ -17,6 +18,7 @@ import { ManageProgressComponent } from './components/future-skills/manage-progr
 import { InactiveUsersComponent } from './components/inactive-users/inactive-users.component';
 import { SkillEditComponent } from './components/skill-edit/skill-edit.component';
 import { NoAuthGuard } from './core/guards/no-auth.guard';
+import { LecturerGuard } from './core/guards/lecturer.guard';
 
 export const routes: Routes = [
     { path: 'main', component: MainPageComponent },
@@ -34,6 +36,7 @@ export const routes: Routes = [
     { path: 'future-skills', redirectTo: 'future-skills/dashboard', pathMatch: 'full' },
     { path: 'future-skills/progress', component: ManageProgressComponent, canActivate: [AuthGuard, FutureSkillsGuard] },
     { path: 'inactive-users', component: InactiveUsersComponent, canActivate: [AuthGuard, FutureSkillsGuard] },
+    { path: 'notifications', component: NotificationsComponent, canActivate: [AuthGuard, LecturerGuard]},
     { path: 'skill-edit', component: SkillEditComponent, canActivate: [AuthGuard, AdminGuard] },
     {
         path: 'profile/skills',

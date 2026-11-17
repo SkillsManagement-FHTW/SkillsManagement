@@ -1,0 +1,83 @@
+<div class="content-container">
+
+    <div class="content-header">
+        <h1>{{ 'NOTIFICATIONS.TITLE' | translate }}</h1>
+    </div>
+
+    <div class="content-body">
+
+        <ng-container *ngIf="notifications$ | async as notifications">
+
+            <div class="alert alert-info" *ngIf="notifications.length === 0">
+                {{ 'NOTIFICATIONS.NO_NOTIFICATIONS' | translate }}
+            </div>
+
+            <div class="table-responsive" *ngIf="notifications.length > 0">
+
+                <table class="table table-hover">
+
+                    <thead>
+                        <tr>
+                            <th>{{ 'NOTIFICATIONS.TYPE' | translate }}</th>
+                            <th>{{ 'NOTIFICATIONS.TITLE' | translate }}</th>
+                            <th>{{ 'NOTIFICATIONS.DEADLINE' | translate }}</th>
+                            <th>{{ 'NOTIFICATIONS.STATUS' | translate }}</th>
+                            <th>{{ 'NOTIFICATIONS.ACTION' | translate }}</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr *ngFor="let notification of notifications">
+
+                            <td>
+                                {{ (notification.type === 'survey'
+                                ? 'NOTIFICATIONS.SURVEY'
+                                : 'NOTIFICATIONS.INFO') | translate }}
+                            </td>
+
+                            <td>{{ notification.title }}</td>
+
+                            <td>
+                                {{ notification.deadline | date:'dd.MM.yyyy' }}
+                            </td>
+
+                            <td>
+                                <span class="status-badge" [ngClass]="notification.status">
+
+                                    {{ (notification.status === 'open'
+                                    ? 'NOTIFICATIONS.OPEN'
+                                    : notification.status === 'read'
+                                    ? 'NOTIFICATIONS.READ'
+                                    : 'NOTIFICATIONS.EXPIRED') | translate }}
+
+                                </span>
+                            </td>
+
+                            <td>
+                                <button class="btn-open" (click)="openNotification(notification)">
+                                    {{ 'NOTIFICATIONS.OPEN_BUTTON' | translate }}
+                                </button>
+                            </td>
+
+                        </tr>
+                    </tbody>
+
+                </table>
+            </div>
+
+        </ng-container>
+
+        <div class="notification-details" *ngIf="selectedNotification">
+
+            <h2>{{ selectedNotification.title }}</h2>
+
+            <p>{{ selectedNotification.description }}</p>
+
+            <button class="btn-close" (click)="closeNotification()">
+                {{ 'NOTIFICATIONS.CLOSE_BUTTON' | translate }}
+            </button>
+
+        </div>
+
+    </div>
+</div>
