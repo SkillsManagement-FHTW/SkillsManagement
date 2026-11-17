@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 import roleEnum from "../models/enums/role.enum.js";
 import * as userService from "../services/user.service.js";
 import logger from "../config/logger.js";
+import { ForbiddenError } from "../errors/forbidden.error.js";
 
 export const getAllUsers = async (req, res) => {
   try {
@@ -87,6 +88,10 @@ export const updateUser = async (req, res) => {
     logger.info(`User updated: ${id}`);
     res.status(200).json(updatedUser);
   } catch (error) {
+    if (error instanceof ForbiddenError) {
+      logger.warn(`Forbidden update of user ${req.params.id} by ${req.user?.id}`);
+      return res.status(error.status).json({ message: error.message });
+    }
     logger.error('Error in updateUser controller:', error);
     res.status(500).json({ 
         message: 'Failed to update user', 

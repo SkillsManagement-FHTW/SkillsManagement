@@ -21,12 +21,12 @@ export class ManageProgressService {
   }
 
   getAllFutureSkills(): Observable<any[]> {
-    return this.http.get<any[]>(this.apiUrl);
+    return this.http.get<any[]>(this.apiUrl, { headers: this.getAuthHeaders() });
   }
 
 
   createSkill(payload: any): Observable<any> {
-    return this.http.post(this.apiUrl, payload);
+    return this.http.post(this.apiUrl, payload, { headers: this.getAuthHeaders() });
   }
 
   getAllLecturers(): Observable<any[]> {
@@ -47,11 +47,11 @@ export class ManageProgressService {
   }
 
   updateSkill(id: string, updatedSkill: any): Observable<any> {
-    return this.http.put(`${this.apiUrl}/${id}`, updatedSkill);
+    return this.http.put(`${this.apiUrl}/${id}`, updatedSkill, { headers: this.getAuthHeaders() });
   }
 
   deleteSkill(id: string): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/${id}`);
+    return this.http.delete(`${this.apiUrl}/${id}`, { headers: this.getAuthHeaders() });
   }
 
   addFutureSkillToSkills(futureSkillId: string, userId: string): Observable<any> {
@@ -86,6 +86,6 @@ export class ManageProgressService {
    * Sends an email to recipients (used in email modal)
    */
   sendEmail(payload: { recipients: string[]; subject: string; message: string }): Observable<any> {
-    return this.http.post(`${this.apiUrl}/send-email`, payload);
+    return this.http.post(`${this.apiUrl}/send-email`, payload, { headers: this.getAuthHeaders() });
   }
 }

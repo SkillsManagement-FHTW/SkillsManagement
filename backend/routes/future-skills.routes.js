@@ -9,20 +9,23 @@ import {
     sendFutureSkillMail
 } from '../controllers/future.skills.controller.js';
 import {getFutureSkillStatusEmail} from "../controllers/email.controller.js";
-import {authenticateToken} from "../middleware/auth.middleware.js";
+import {authenticateToken, authorizeRole} from "../middleware/auth.middleware.js";
+import roleEnum from "../models/enums/role.enum.js";
+
+const adminOrCompetenceLeader = authorizeRole([roleEnum.ADMIN, roleEnum.COMPETENCE_LEADER]);
 
 // GET all future skills
-router.get('/', getAllFutureSkills);
+router.get('/', authenticateToken, getAllFutureSkills);
 
 // POST a new future skill
-router.post('/', createFutureSkill);
+router.post('/', authenticateToken, adminOrCompetenceLeader, createFutureSkill);
 
 // PUT (update) a skill by ID
-router.put('/:id', updateFutureSkill);
+router.put('/:id', authenticateToken, adminOrCompetenceLeader, updateFutureSkill);
 
 // DELETE a skill by ID
-router.delete('/:id', deleteFutureSkill);
+router.delete('/:id', authenticateToken, adminOrCompetenceLeader, deleteFutureSkill);
 
-router.post('/send-email', sendFutureSkillMail);
+router.post('/send-email', authenticateToken, adminOrCompetenceLeader, sendFutureSkillMail);
 
 export default router;
