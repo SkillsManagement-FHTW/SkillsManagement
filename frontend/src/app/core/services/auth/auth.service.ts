@@ -80,9 +80,7 @@ export class AuthService {
 
   // Admin creates a new user
   adminCreateUser(userData: any) {
-    const headers = new HttpHeaders({
-      'x-admin-creation': 'true'
-    });
+    const headers = this.getAuthHeaders().set('x-admin-creation', 'true');
     
     return this.http.post(
       `${API_CONFIG.baseUrl}${API_CONFIG.endpoints.auth.register}`,
