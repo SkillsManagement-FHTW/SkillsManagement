@@ -16,13 +16,13 @@ export const generateToken = (user) => {
 };
 
 export const verifyToken = async (token) => {
-    try {
-        // Prüfe ob Token in Blacklist
-        const isBlacklisted = await BlacklistedToken.exists({ token });
-        if (isBlacklisted) {
-            throw new Error('Token is blacklisted');
-        }
+    // Prüfe ob Token in Blacklist
+    const isBlacklisted = await BlacklistedToken.exists({ token });
+    if (isBlacklisted) {
+        throw new Error('Token is blacklisted');
+    }
 
+    try {
         return jwt.verify(token, JWT_SECRET);
     } catch (error) {
         throw new Error('Invalid token');
