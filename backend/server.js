@@ -13,6 +13,7 @@ import emailRoutes from "./routes/email.routes.js";
 import futureSkillsRoutes from "./routes/future-skills.routes.js";
 import dashboardRoutes from './routes/dashboard.routes.js';
 import notificationRoutes from './routes/notification.routes.js';
+import surveyRoutes from './routes/survey.routes.js';
 
 import connectToDB from "./database/mongodb.js";
 import {smtpService} from "./services/mail/smtp.service.js";
@@ -25,6 +26,7 @@ import './models/comment.model.js';
 import './models/skill.model.js';
 import './models/future.skill.model.js';
 import './models/notification.model.js';
+import './models/survey.model.js';
 
 
 const __filename = fileURLToPath(import.meta.url);
@@ -88,6 +90,7 @@ app.use('/api/v1/email', emailRoutes)
 app.use('/api/v1/future-skills', futureSkillsRoutes)
 app.use('/api/v1/dashboard', dashboardRoutes)
 app.use('/api/v1/notifications', notificationRoutes)
+app.use('/api/v1/surveys', surveyRoutes)
 
 app.listen(PORT, async () => {
   logger.info(`Server is running on http://localhost:${PORT}`);
