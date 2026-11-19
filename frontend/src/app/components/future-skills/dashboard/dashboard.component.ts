@@ -266,10 +266,12 @@ export class DashboardComponent implements OnInit {
     this.skillLevelsCount = levels.size;
   }
 
-  onSkillSelect(event:any): void {
+  onSkillSelect(event: any, isStackedChart: boolean): void {
     // Stacked charts emit the skill as series; regular bar charts emit it as name.
     const skillName: string | undefined =
-      typeof event === 'string' ? event : (event?.series ?? event?.name);
+      typeof event === 'string'
+        ? event
+        : isStackedChart ? event?.series : event?.name;
     
     if (!skillName) return;
 

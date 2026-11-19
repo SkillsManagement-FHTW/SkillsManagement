@@ -952,7 +952,7 @@ export class UserListComponent implements OnInit, OnDestroy {
   }
 
   private getSkillDefinitionByName(skillName: string): Skill | undefined {
-    const normalizedName = skillName.toLowerCase();
+    const normalizedName = skillName.trim().toLowerCase();
     return this.allSkillDefinitions.find(skill => skill.name.toLowerCase() === normalizedName);
   }
 
@@ -982,7 +982,7 @@ export class UserListComponent implements OnInit, OnDestroy {
 
   private doesUserSkillMatchSelectedSkill(userSkill: any, selectedSkillName: string): boolean {
     const userSkillName = this.getSkillName(userSkill);
-    if (userSkillName.toLowerCase() === selectedSkillName.toLowerCase()) {
+    if (userSkillName.trim().toLowerCase() === selectedSkillName.trim().toLowerCase()) {
       return true;
     }
 
@@ -999,7 +999,7 @@ export class UserListComponent implements OnInit, OnDestroy {
 
   private doesFutureSkillMatchSelectedSkill(futureSkill: any, selectedSkillName: string): boolean {
     const futureSkillName = futureSkill?.skill_id?.name || futureSkill?.name || '';
-    if (futureSkillName.toLowerCase() === selectedSkillName.toLowerCase()) {
+    if (futureSkillName.trim().toLowerCase() === selectedSkillName.trim().toLowerCase()) {
       return true;
     }
 

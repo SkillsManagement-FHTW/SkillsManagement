@@ -84,7 +84,7 @@
         xAxisLabel="Skill"
         yAxisLabel="Count"
         [animations]="true"
-        (select)="onSkillSelect($event)">
+        (select)="onSkillSelect($event, true)">
       </ngx-charts-bar-vertical-stacked>
 
     </div>
@@ -126,7 +126,7 @@
       [yAxisTickFormatting]="yAxisTickFormatting"
       [yScaleMax]="yMax"
       [animations]="true"
-      (select)="onSkillSelect($event)">
+      (select)="onSkillSelect($event, false)">
     </ngx-charts-bar-vertical>
   </div>
 
