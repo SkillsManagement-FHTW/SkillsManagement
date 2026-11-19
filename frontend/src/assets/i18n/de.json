@@ -116,7 +116,7 @@
     "COLUMNS": "Spalten",
     "RESET_COLUMNS": "Default-Sicht",
     "FILTER_BY_SKILLS": "Nach Skills filtern",
-    "SKILLS_SELECTED": "Skills: {count} ausgewählt",
+    "SKILLS_SELECTED": "Skills: {{count}} ausgewählt",
     "SEARCH_SKILLS": "Skills suchen...",
     "SHOW_ALL_SKILLS": "Alle Skills anzeigen",
     "NO_SKILLS_FOUND": "Keine passenden Skills gefunden",

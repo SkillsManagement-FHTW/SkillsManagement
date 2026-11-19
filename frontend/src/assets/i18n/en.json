@@ -117,7 +117,7 @@
     "COLUMNS": "Columns",
     "RESET_COLUMNS": "Default view",
     "FILTER_BY_SKILLS": "Filter by Skills",
-    "SKILLS_SELECTED": "Skills: {count} selected",
+    "SKILLS_SELECTED": "Skills: {{count}} selected",
     "SEARCH_SKILLS": "Search skills...",
     "SHOW_ALL_SKILLS": "Show All Skills",
     "NO_SKILLS_FOUND": "No matching skills found",

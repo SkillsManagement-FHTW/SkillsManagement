@@ -267,9 +267,9 @@ export class DashboardComponent implements OnInit {
   }
 
   onSkillSelect(event:any): void {
-    // Both bar charts expose the skill as `name`; stacked charts use `series` for the level.
+    // Stacked charts emit the skill as series; regular bar charts emit it as name.
     const skillName: string | undefined =
-      typeof event === 'string' ? event : event?.name;
+      typeof event === 'string' ? event : (event?.series ?? event?.name);
     
     if (!skillName) return;
 

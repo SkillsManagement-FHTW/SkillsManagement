@@ -339,7 +339,12 @@ export class UserListComponent implements OnInit, OnDestroy {
         
         // check if the user has at least one of the selected skills
         return this.selectedSkills.some(selectedSkill =>
-          user.skills!.some(skill => this.doesUserSkillMatchSelectedSkill(skill, selectedSkill))
+          (user.skills || []).some(skill =>
+            this.doesUserSkillMatchSelectedSkill(skill, selectedSkill)
+          ) ||
+          (user.futureSkills || []).some(futureSkill =>
+            this.doesFutureSkillMatchSelectedSkill(futureSkill, selectedSkill)
+          )
         );
       });
     }
@@ -990,6 +995,23 @@ export class UserListComponent implements OnInit, OnDestroy {
 
     return this.isAncestorSkill(userSkillId, selectedSkill._id)
       || this.isAncestorSkill(selectedSkill._id, userSkillId);
+  }
+
+  private doesFutureSkillMatchSelectedSkill(futureSkill: any, selectedSkillName: string): boolean {
+    const futureSkillName = futureSkill?.skill_id?.name || futureSkill?.name || '';
+    if (futureSkillName.toLowerCase() === selectedSkillName.toLowerCase()) {
+      return true;
+    }
+
+    const futureSkillId = futureSkill?.skill_id?._id || futureSkill?.skill_id || null;
+    const selectedSkill = this.getSkillDefinitionByName(selectedSkillName);
+
+    if (!futureSkillId || !selectedSkill) {
+      return false;
+    }
+
+    return this.isAncestorSkill(futureSkillId, selectedSkill._id)
+      || this.isAncestorSkill(selectedSkill._id, futureSkillId);
   }
   
   // method to filter by skills (multiple)
