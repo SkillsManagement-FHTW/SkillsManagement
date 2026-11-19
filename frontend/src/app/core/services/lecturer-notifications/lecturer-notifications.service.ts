@@ -1,46 +1,18 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, map } from 'rxjs';
+import { BehaviorSubject, map, Observable, of } from 'rxjs';
+import { switchMap } from 'rxjs/operators';
 import { Notification } from '../../../models/notification.model';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { API_CONFIG } from '../../config/api.config';
+import { AuthService } from '../auth/auth.service';
+import { UserRole } from '../../../models/enums/user-roles.enum';
 
 @Injectable({
   providedIn: 'root'
 })
 export class LecturerNotificationsService {
 
-  private notificationsSubject = new BehaviorSubject<Notification[]>([
-    {
-      id: 1,
-      type: 'survey',
-      title: 'Evaluierung des Studiengangs',
-      deadline: '2026-11-30',
-      status: 'open',
-      description: 'Bitte nehmen Sie an der Evaluierung teil.'
-    },
-    {
-      id: 2,
-      type: 'info',
-      title: 'Neue Lehrveranstaltungsrichtlinien',
-      deadline: '2026-11-25',
-      status: 'read',
-      description: 'Informationen zu den neuen Richtlinien.'
-    },
-    {
-      id: 3,
-      type: 'survey',
-      title: 'Feedback zur Lernplattform',
-      deadline: '2026-12-05',
-      status: 'open',
-      description: 'Bitte geben Sie Feedback zur Lernplattform.'
-    },
-    {
-      id: 4,
-      type: 'survey',
-      title: 'Evaluierung der Lehrveranstaltung',
-      deadline: '2026-11-15',
-      status: 'expired',
-      description: 'Die Teilnahmefrist ist bereits abgelaufen.'
-    }
-  ]);
+  private notificationsSubject = new BehaviorSubject<Notification[]>([]);
 
   notifications$ = this.notificationsSubject.asObservable();
 
@@ -52,14 +24,46 @@ export class LecturerNotificationsService {
     )
   );
 
-  markAsRead(id: number): void {
-    const updatedNotifications = this.notificationsSubject.value.map(
-      notification =>
-        notification.id === id
-          ? { ...notification, status: 'read' as const }
-          : notification
-    );
+  constructor(
+    private http: HttpClient,
+    private authService: AuthService
+  ) {
+    this.authService.currentUser.pipe(
+      switchMap(user => user?.role === UserRole.LECTURER
+        ? this.loadNotifications()
+        : of([] as Notification[])
+      )
+    ).subscribe({
+      next: notifications => this.notificationsSubject.next(notifications),
+      error: error => console.error('Failed to load notifications:', error)
+    });
+  }
 
-    this.notificationsSubject.next(updatedNotifications);
+  private getAuthHeaders(): HttpHeaders {
+    const token = this.authService.currentUserValue?.token;
+    return new HttpHeaders({ Authorization: `Bearer ${token || ''}` });
+  }
+
+  loadNotifications(): Observable<Notification[]> {
+    return this.http.get<Notification[]>(
+      `${API_CONFIG.baseUrl}${API_CONFIG.endpoints.notifications.all}`,
+      { headers: this.getAuthHeaders() }
+    );
+  }
+
+  markAsRead(id: string): void {
+    this.http.patch<Notification>(
+      `${API_CONFIG.baseUrl}${API_CONFIG.endpoints.notifications.markAsRead(id)}`,
+      {},
+      { headers: this.getAuthHeaders() }
+    ).subscribe({
+      next: updatedNotification => {
+        const updatedNotifications = this.notificationsSubject.value.map(notification =>
+          notification._id === updatedNotification._id ? updatedNotification : notification
+        );
+        this.notificationsSubject.next(updatedNotifications);
+      },
+      error: error => console.error('Failed to mark notification as read:', error)
+    });
   }
 }

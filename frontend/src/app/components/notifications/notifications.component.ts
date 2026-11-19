@@ -26,7 +26,7 @@ export class NotificationsComponent {
     this.selectedNotification = notification;
 
     if (notification.status === 'open') {
-    this.notificationsService.markAsRead(notification.id);
+      this.notificationsService.markAsRead(notification._id);
     }
   }
 
