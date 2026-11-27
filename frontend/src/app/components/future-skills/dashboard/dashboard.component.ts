@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { DashboardService } from '../../../core';
 import { Color, ScaleType, LegendPosition } from '@swimlane/ngx-charts';
@@ -102,7 +103,7 @@ export class DashboardComponent implements OnInit {
     return Math.max(10, maxValue);
   }
 
-  constructor(private dashboardService: DashboardService) {
+  constructor(private dashboardService: DashboardService, private router: Router) {
   }
 
   // =========================
@@ -263,5 +264,17 @@ export class DashboardComponent implements OnInit {
       skill.series?.forEach((s: any) => levels.add(s.name))
     );
     this.skillLevelsCount = levels.size;
+  }
+
+  onSkillSelect(event: any, isStackedChart: boolean): void {
+    // Stacked charts emit the skill as series; regular bar charts emit it as name.
+    const skillName: string | undefined =
+      typeof event === 'string'
+        ? event
+        : isStackedChart ? event?.series : event?.name;
+    
+    if (!skillName) return;
+
+    this.router.navigate(['/user'], { queryParams: { skill: skillName } });
   }
 }

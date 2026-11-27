@@ -117,7 +117,7 @@
     "COLUMNS": "Columns",
     "RESET_COLUMNS": "Default view",
     "FILTER_BY_SKILLS": "Filter by Skills",
-    "SKILLS_SELECTED": "Skills: {count} selected",
+    "SKILLS_SELECTED": "Skills: {{count}} selected",
     "SEARCH_SKILLS": "Search skills...",
     "SHOW_ALL_SKILLS": "Show All Skills",
     "NO_SKILLS_FOUND": "No matching skills found",
@@ -284,7 +284,23 @@
     "REGISTER": "Register",
     "FUTURE_SKILLS_DASHBOARD": "Dashboard",
     "FUTURE_SKILLS_PLAN": "Plan",
-    "FUTURE_SKILLS_MANAGE_PROGRESS": "Manage Progress"
+    "FUTURE_SKILLS_MANAGE_PROGRESS": "Manage Progress",
+    "NOTIFICATIONS": "Notifications"
+  },
+  "NOTIFICATIONS": {
+    "TITLE": "Notifications",
+    "TYPE": "Type",
+    "SURVEY": "Survey",
+    "INFO": "Information",
+    "DEADLINE": "Deadline",
+    "STATUS": "Status",
+    "ACTION": "Action",
+    "OPEN": "Open",
+    "READ": "Read",
+    "EXPIRED": "Expired",
+    "OPEN_BUTTON": "Open",
+    "CLOSE_BUTTON": "Close",
+    "NO_NOTIFICATIONS": "No notifications available."
   },
   "DIALOGS": {
     "CONFIRM_DELETE": "Are you sure you want to delete this item?",

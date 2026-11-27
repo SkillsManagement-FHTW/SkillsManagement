@@ -49,7 +49,11 @@ export const API_CONFIG = {
       userFutureSkillLevelMatrix: (id: string) => `dashboard/user/${id}/future-skills-level-matrix`,
       userSkillsDistribution: (id: string) => `/dashboard/user/${id}/skills/distribution`
     },
-    comments: '/comments'
+    comments: '/comments',
+    notifications: {
+      all: '/notifications',
+      markAsRead: (id: string) => `/notifications/${id}/read`
+    }
     //  API-Endpoints
   }
 };
