@@ -322,7 +322,7 @@
               <button
                 class="btn btn-icon btn-delete"
                 (click)="openDeleteDialog(user)"
-                *ngIf="isAdminOrCompetenceLeader && user.id !== currentUserId"
+                *ngIf="isAdmin && user.id !== currentUserId"
                 [title]="'USER.DELETE_USER' | translate"
               >
                 <i class="fa fa-trash"></i>
