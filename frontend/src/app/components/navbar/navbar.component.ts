@@ -10,6 +10,7 @@ import { NotificationService } from '../../core/services/notification/notificati
 import { ClickOutsideDirective } from '../../shared/directives/click-outside.directive';
 import { LanguageSelectorComponent } from '../../shared/components/language-selector/language-selector.component';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { LecturerNotificationsService } from '../../core/services/lecturer-notifications/lecturer-notifications.service';
 
 @Component({
   selector: 'app-navbar',
@@ -27,6 +28,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
   isDropdownOpen = false;
   isUserDropdownOpen = false;
   inactiveUsersCount = 0;
+  openNotificationsCount = 0;
   isMenuOpen = false;
   private subscription: Subscription = new Subscription();
 
@@ -35,6 +37,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
     private userService: UserService,
     private router: Router,
     private notificationService: NotificationService,
+    private lecturerNotificationsService: LecturerNotificationsService,
     private translateService: TranslateService
   ) {
     this.subscription.add(
@@ -45,6 +48,14 @@ export class NavbarComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+
+    this.subscription.add(
+      this.lecturerNotificationsService.openNotificationsCount$
+        .subscribe(count => {
+          this.openNotificationsCount = count;
+        })
+    );
+
     this.authService.currentUser.subscribe(user => {
       this.isLoggedIn = !!user;
       this.username = user?.username || null;

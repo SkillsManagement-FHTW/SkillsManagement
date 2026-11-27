@@ -10,7 +10,7 @@ import { DialogService } from '../../core/services/dialog';
 import { User } from '../../models/user.model';
 import { Skill } from '../../models/skill.model';
 import { HttpClientModule } from '@angular/common/http';
-import { RouterModule, Router } from '@angular/router';
+import { RouterModule, Router, ActivatedRoute } from '@angular/router';
 import { UserRole } from '../../models/enums/user-roles.enum';
 import { UserLanguage } from '../../models/enums/user-language.enum';
 import { CompetenceField } from '../../models/enums/competence-field.enum';
@@ -152,7 +152,7 @@ export class UserListComponent implements OnInit, OnDestroy {
   // for permission control
   isAdminOrCompetenceLeader: boolean = false;
   currentUserId: string = '';
-  
+
   constructor(
     private userService: UserService,
     private skillService: SkillService,
@@ -162,7 +162,8 @@ export class UserListComponent implements OnInit, OnDestroy {
     private dialogService: DialogService,
     private router: Router,
     private notificationService: NotificationService,
-    private translateService: TranslateService
+    private translateService: TranslateService,
+    private route: ActivatedRoute
   ) {
     // Default-Text für E-Mail immer auf Deutsch
     this.emailSubject = 'Nachricht vom Skills Management System';
@@ -191,6 +192,16 @@ export class UserListComponent implements OnInit, OnDestroy {
       });
     }
     
+    this.route.queryParamMap.subscribe(params => {
+      const skill = params.get('skill');
+
+      if (skill) {
+        this.selectedSkills = [skill];
+        this.selectedSkill = skill;
+        this.applyFilters();
+      }
+    })
+
     this.loadUsers();
     console.log('UserListComponent initialized');
     
@@ -328,7 +339,12 @@ export class UserListComponent implements OnInit, OnDestroy {
         
         // check if the user has at least one of the selected skills
         return this.selectedSkills.some(selectedSkill =>
-          user.skills!.some(skill => this.doesUserSkillMatchSelectedSkill(skill, selectedSkill))
+          (user.skills || []).some(skill =>
+            this.doesUserSkillMatchSelectedSkill(skill, selectedSkill)
+          ) ||
+          (user.futureSkills || []).some(futureSkill =>
+            this.doesFutureSkillMatchSelectedSkill(futureSkill, selectedSkill)
+          )
         );
       });
     }
@@ -936,7 +952,7 @@ export class UserListComponent implements OnInit, OnDestroy {
   }
 
   private getSkillDefinitionByName(skillName: string): Skill | undefined {
-    const normalizedName = skillName.toLowerCase();
+    const normalizedName = skillName.trim().toLowerCase();
     return this.allSkillDefinitions.find(skill => skill.name.toLowerCase() === normalizedName);
   }
 
@@ -966,7 +982,7 @@ export class UserListComponent implements OnInit, OnDestroy {
 
   private doesUserSkillMatchSelectedSkill(userSkill: any, selectedSkillName: string): boolean {
     const userSkillName = this.getSkillName(userSkill);
-    if (userSkillName.toLowerCase() === selectedSkillName.toLowerCase()) {
+    if (userSkillName.trim().toLowerCase() === selectedSkillName.trim().toLowerCase()) {
       return true;
     }
 
@@ -979,6 +995,23 @@ export class UserListComponent implements OnInit, OnDestroy {
 
     return this.isAncestorSkill(userSkillId, selectedSkill._id)
       || this.isAncestorSkill(selectedSkill._id, userSkillId);
+  }
+
+  private doesFutureSkillMatchSelectedSkill(futureSkill: any, selectedSkillName: string): boolean {
+    const futureSkillName = futureSkill?.skill_id?.name || futureSkill?.name || '';
+    if (futureSkillName.trim().toLowerCase() === selectedSkillName.trim().toLowerCase()) {
+      return true;
+    }
+
+    const futureSkillId = futureSkill?.skill_id?._id || futureSkill?.skill_id || null;
+    const selectedSkill = this.getSkillDefinitionByName(selectedSkillName);
+
+    if (!futureSkillId || !selectedSkill) {
+      return false;
+    }
+
+    return this.isAncestorSkill(futureSkillId, selectedSkill._id)
+      || this.isAncestorSkill(selectedSkill._id, futureSkillId);
   }
   
   // method to filter by skills (multiple)

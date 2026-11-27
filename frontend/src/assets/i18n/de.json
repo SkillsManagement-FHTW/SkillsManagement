@@ -116,7 +116,7 @@
     "COLUMNS": "Spalten",
     "RESET_COLUMNS": "Default-Sicht",
     "FILTER_BY_SKILLS": "Nach Skills filtern",
-    "SKILLS_SELECTED": "Skills: {count} ausgewählt",
+    "SKILLS_SELECTED": "Skills: {{count}} ausgewählt",
     "SEARCH_SKILLS": "Skills suchen...",
     "SHOW_ALL_SKILLS": "Alle Skills anzeigen",
     "NO_SKILLS_FOUND": "Keine passenden Skills gefunden",
@@ -282,7 +282,23 @@
     "REGISTER": "Registrieren",
     "FUTURE_SKILLS_DASHBOARD": "Dashboard",
     "FUTURE_SKILLS_PLAN": "Plan",
-    "FUTURE_SKILLS_MANAGE_PROGRESS": "Manage Progress"
+    "FUTURE_SKILLS_MANAGE_PROGRESS": "Manage Progress",
+    "NOTIFICATIONS": "Mitteilungen"
+  },
+  "NOTIFICATIONS": {
+    "TITLE": "Mitteilungen",
+    "TYPE": "Typ",
+    "SURVEY": "Umfrage",
+    "INFO": "Info",
+    "DEADLINE": "Frist",
+    "STATUS": "Status",
+    "ACTION": "Aktion",
+    "OPEN": "Offen",
+    "READ": "Gelesen",
+    "EXPIRED": "Abgelaufen",
+    "OPEN_BUTTON": "Öffnen",
+    "CLOSE_BUTTON": "Schließen",
+    "NO_NOTIFICATIONS": "Keine Mitteilungen vorhanden."
   },
   "DIALOGS": {
     "CONFIRM_DELETE": "Sind Sie sicher, dass Sie dieses Element löschen möchten?",

@@ -9,7 +9,7 @@ import logger from "../config/logger.js";
 import FutureSkill from "../models/future.skill.model.js";
 
 export const getAllUsers = async () => {
-    return UserRepository.findAllActiveUsers()
+    const users = await UserRepository.findAllActiveUsers()
         .select('-password')
         .populate({ path: 'skills.skill', select: 'name description level category parent_id' })
         .populate({ path: 'skills.levelHistory.changedBy', select: 'firstName lastName email' })
@@ -26,6 +26,27 @@ export const getAllUsers = async () => {
             ]
         })
         .lean();
+
+    const futureSkills = await FutureSkill.find({
+        lecturer_id: { $in: users.map(user => user._id) }
+    })
+        .populate('skill_id', 'name parent_id')
+        .lean();
+
+    const futureSkillsByUser = new Map();
+    for (const futureSkill of futureSkills) {
+        const userId = futureSkill.lecturer_id?.toString();
+        if (!userId) continue;
+
+        const userSkills = futureSkillsByUser.get(userId) || [];
+        userSkills.push(futureSkill);
+        futureSkillsByUser.set(userId, userSkills);
+    }
+
+    return users.map(user => ({
+        ...user,
+        futureSkills: futureSkillsByUser.get(user._id.toString()) || []
+    }));
 }
 
 export const getUserById = async (id) => {
