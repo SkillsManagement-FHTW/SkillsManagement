@@ -1,96 +1,8 @@
-import express from 'express'
-import cors from 'cors'
-import path from 'path'
-import fs from 'fs'
-import { fileURLToPath } from 'url'
-import morgan from 'morgan'
-
-import userRoutes from './routes/user.routes.js'
-import skillRoutes from './routes/skill.routes.js'
-import commentRoutes from './routes/comment.routes.js'
-import authRoutes from "./routes/auth.routes.js";
-import emailRoutes from "./routes/email.routes.js";
-import futureSkillsRoutes from "./routes/future-skills.routes.js";
-import dashboardRoutes from './routes/dashboard.routes.js';
-import notificationRoutes from './routes/notification.routes.js';
-import surveyRoutes from './routes/survey.routes.js';
-
+import app from './app.js'
 import connectToDB from "./database/mongodb.js";
 import {smtpService} from "./services/mail/smtp.service.js";
-
-import { PORT, NODE_ENV } from "./config/env.js";
+import { PORT } from "./config/env.js";
 import logger from "./config/logger.js";
-
-import './models/user.model.js';
-import './models/comment.model.js';
-import './models/skill.model.js';
-import './models/future.skill.model.js';
-import './models/notification.model.js';
-import './models/survey.model.js';
-
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-const app = express()
-
-// HTTP Request Logging with Morgan
-const morganStream = {
-  write: (message) => {
-    const statusCode = parseInt(message.split(' ')[message.split(' ').length - 2]);
-    if (statusCode >= 400) {
-      logger.warn(message.trim());
-    } else if (message.includes('POST') || message.includes('PUT') || message.includes('DELETE')) {
-      logger.info(message.trim());
-    }
-  }
-};
-
-const morganFormat = NODE_ENV === 'production' ? 'combined' : 'dev';
-app.use(morgan(morganFormat, { 
-  stream: morganStream,
-  skip: (req, res) => {
-    return req.method === 'OPTIONS' || (req.method === 'GET' && res.statusCode < 400);
-  }
-}));
-
-//  CORS for all Routs
-app.use(cors());
-app.use(express.json({ limit: '50mb' }));
-app.use(express.urlencoded({ limit: '50mb', extended: true }));
-
-// Determine uploads directory path
-// In production (Docker): process.cwd() is usually /app
-// In development: process.cwd() is the project root
-// Try process.cwd() first (matches multer), fallback to __dirname
-let uploadsPath;
-const uploadsPathCwd = path.join(process.cwd(), 'uploads');
-const uploadsPathDirname = path.join(__dirname, 'uploads');
-
-// Check which path exists, prefer process.cwd() to match multer
-if (fs.existsSync(uploadsPathCwd)) {
-  uploadsPath = uploadsPathCwd;
-} else if (fs.existsSync(uploadsPathDirname)) {
-  uploadsPath = uploadsPathDirname;
-  logger.warn(`Using __dirname for uploads path: ${uploadsPath}. Consider using process.cwd() for consistency.`);
-} else {
-  // If neither exists, use process.cwd() (will be created by multer)
-  uploadsPath = uploadsPathCwd;
-  logger.info(`Uploads directory will be created at: ${uploadsPath}`);
-}
-
-logger.info(`Serving static files from: ${uploadsPath}`);
-app.use('/uploads', express.static(uploadsPath));
-
-app.use('/api/v1/users', userRoutes)
-app.use('/api/v1/skills', skillRoutes)
-app.use('/api/v1/comments', commentRoutes)
-app.use('/api/v1/auth', authRoutes)
-app.use('/api/v1/email', emailRoutes)
-app.use('/api/v1/future-skills', futureSkillsRoutes)
-app.use('/api/v1/dashboard', dashboardRoutes)
-app.use('/api/v1/notifications', notificationRoutes)
-app.use('/api/v1/surveys', surveyRoutes)
 
 app.listen(PORT, async () => {
   logger.info(`Server is running on http://localhost:${PORT}`);
@@ -103,5 +15,3 @@ app.listen(PORT, async () => {
     process.exit(1);
   }
 })
-
-export default app
