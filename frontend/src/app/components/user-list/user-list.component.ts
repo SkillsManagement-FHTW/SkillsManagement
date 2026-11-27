@@ -151,6 +151,7 @@ export class UserListComponent implements OnInit, OnDestroy {
   
   // for permission control
   isAdminOrCompetenceLeader: boolean = false;
+  isAdmin: boolean = false;
   currentUserId: string = '';
 
   constructor(
@@ -184,6 +185,7 @@ export class UserListComponent implements OnInit, OnDestroy {
       console.log('Normalized role:', normalizedRole);
       
       this.isAdminOrCompetenceLeader = currentUser.role === UserRole.ADMIN || currentUser.role === UserRole.COMPETENCE_LEADER;
+      this.isAdmin = currentUser.role === UserRole.ADMIN;
       
       console.log('Permissions after check:', {
         isAdminOrCompetenceLeader: this.isAdminOrCompetenceLeader,
@@ -808,10 +810,10 @@ export class UserListComponent implements OnInit, OnDestroy {
     console.log('delete user:', userId);
     
     // Check if the user has Admin or Competence Leader rights
-    if (!this.isAdminOrCompetenceLeader) {
+    if (!this.isAdmin) {
       this.dialogService.showError(
         'Keine Berechtigung', 
-        'Sie haben keine Berechtigung, Benutzer zu löschen. Diese Aktion ist nur für Administratoren und Kompetenzleiter verfügbar.'
+        'Sie haben keine Berechtigung, Benutzer zu löschen. Diese Aktion ist nur für Administratoren verfügbar.'
       );
       return;
     }
@@ -852,7 +854,7 @@ export class UserListComponent implements OnInit, OnDestroy {
   // Confirm delete user
   confirmDeleteUser(user: User): void {
     // Check again if the user has Admin or Competence Leader rights (additional security level)
-    if (!this.isAdminOrCompetenceLeader) {
+    if (!this.isAdmin) {
       this.dialogService.showError(
         this.translateService.instant('USER.NO_PERMISSION'), 
         this.translateService.instant('USER.NO_PERMISSION')
@@ -1145,6 +1147,7 @@ export class UserListComponent implements OnInit, OnDestroy {
       this.currentUserId = currentUser.id;
       
       this.isAdminOrCompetenceLeader = currentUser.role === UserRole.ADMIN || currentUser.role === UserRole.COMPETENCE_LEADER;
+      this.isAdmin = currentUser.role === UserRole.ADMIN;
       
       console.log('User permissions:', { 
         isAdminOrCompetenceLeader: this.isAdminOrCompetenceLeader,
